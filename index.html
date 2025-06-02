@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Repository</title>
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --accent-color: #3498DB;
+            --bg-color: #F8F9FA;
+            --text-color: #2C3E50;
+            --border-color: #E9ECEF;
+            --folder-bg: #EBF5FB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            text-align: center;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            background: var(--folder-bg);
+            border-radius: 4px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .folder {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--folder-bg);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .folder:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .folder-name {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .folder-name::before {
+            content: "📁";
+            margin-right: 0.5rem;
+        }
+
+        .file-list {
+            list-style: none;
+            margin-left: 2rem;
+        }
+
+        .file-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .file-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .file-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-link::before {
+            content: "📄";
+            margin-right: 0.5rem;
+        }
+
+        .file-link:hover {
+            color: #2980b9;
+        }
+
+        .file-info {
+            font-size: 0.9rem;
+            color: #6C757D;
+            margin-left: 1rem;
+        }
+
+        .empty-folder {
+            color: #6C757D;
+            font-style: italic;
+            margin-left: 2rem;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .file-list {
+                margin-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Document Repository</h1>
+        <div id="breadcrumb" class="breadcrumb">
+            <a href="#" onclick="navigateToRoot()">Home</a>
+        </div>
+        <div id="content">
+            <div id="loading">Loading files...</div>
+        </div>
+    </div>
+
+    <script>
+        let currentPath = [];
+
+        async function loadDirectory(path = []) {
+            try {
+                currentPath = path;
+                updateBreadcrumb();
+                
+                const dirPath = path.join('/');
+                const response = await fetch(`/api/files?path=${encodeURIComponent(dirPath)}`);
+                if (!response.ok) throw new Error('Failed to load directory');
+                
+                const data = await response.json();
+                const content = document.getElementById('content');
+                content.innerHTML = '';
+
+                // Sort folders and files
+                const folders = data.filter(item => item.type === 'directory').sort((a, b) => a.name.localeCompare(b.name));
+                const files = data.filter(item => item.type === 'file').sort((a, b) => a.name.localeCompare(b.name));
+
+                // Create folder elements
+                folders.forEach(folder => {
+                    const folderDiv = createFolderElement(folder.name);
+                    content.appendChild(folderDiv);
+                });
+
+                // Create file elements
+                if (files.length > 0) {
+                    const fileList = document.createElement('ul');
+                    fileList.className = 'file-list';
+                    
+                    files.forEach(file => {
+                        const fileItem = createFileElement(file.name);
+                        fileList.appendChild(fileItem);
+                    });
+                    
+                    content.appendChild(fileList);
+                }
+
+            } catch (error) {
+                console.error('Error loading directory:', error);
+                document.getElementById('content').innerHTML = 
+                    '<div class="error">Error loading directory. Please try again later.</div>';
+            }
+        }
+
+        function createFolderElement(name) {
+            const folderDiv = document.createElement('div');
+            folderDiv.className = 'folder';
+            
+            const folderName = document.createElement('div');
+            folderName.className = 'folder-name';
+            folderName.textContent = name;
+            folderName.onclick = () => navigateToFolder(name);
+            
+            folderDiv.appendChild(folderName);
+            return folderDiv;
+        }
+
+        function createFileElement(name) {
+            const li = document.createElement('li');
+            li.className = 'file-item';
+            
+            const link = document.createElement('a');
+            link.className = 'file-link';
+            
+            // Construct the file path relative to the current directory
+            const filePath = [...currentPath, name].join('/');
+            link.href = filePath;
+            link.download = name;
+            
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            
+            const infoSpan = document.createElement('span');
+            infoSpan.className = 'file-info';
+            infoSpan.textContent = getFileExtension(name).toUpperCase();
+            
+            link.appendChild(nameSpan);
+            link.appendChild(infoSpan);
+            li.appendChild(link);
+            
+            return li;
+        }
+
+        function getFileExtension(filename) {
+            return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+        }
+
+        function updateBreadcrumb() {
+            const breadcrumb = document.getElementById('breadcrumb');
+            let html = '<a href="#" onclick="navigateToRoot()">Home</a>';
+            
+            let path = '';
+            currentPath.forEach((segment, index) => {
+                path += '/' + segment;
+                html += ` / <a href="#" onclick="navigateToPath('${path}')">${segment}</a>`;
+            });
+            
+            breadcrumb.innerHTML = html;
+        }
+
+        function navigateToFolder(folderName) {
+            const newPath = [...currentPath, folderName];
+            loadDirectory(newPath);
+        }
+
+        function navigateToPath(path) {
+            const segments = path.split('/').filter(Boolean);
+            loadDirectory(segments);
+        }
+
+        function navigateToRoot() {
+            loadDirectory([]);
+        }
+
+        // Initial load starting from 'documentos' directory
+        loadDirectory(['documentos']);
+    </script>
+</body>
+</html>
