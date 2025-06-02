@@ -1,0 +1,248 @@
+/* Estilos base para layout editorial */
+:root {
+    --text-color: #2C3E50;
+    --heading-color: #34495E;
+    --accent-color: #E67E22;
+    --background-color: #FFFFFF;
+    --quote-bg: #F9F9F9;
+    --heading-font: 'Libre Caslon Text', serif;
+    --body-font: 'Source Sans Pro', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--body-font);
+    color: var(--text-color);
+    line-height: 1.8;
+    background: var(--background-color);
+    font-size: 11pt;
+}
+
+.magazine-article {
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm;
+}
+
+/* Cabeçalho do Artigo */
+.article-header {
+    margin-bottom: 4em;
+    text-align: center;
+}
+
+.header-content {
+    margin-bottom: 3em;
+}
+
+h1 {
+    font-family: var(--heading-font);
+    font-size: 36pt;
+    color: var(--heading-color);
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+}
+
+h2 {
+    font-family: var(--heading-font);
+    font-size: 18pt;
+    color: var(--heading-color);
+    font-weight: 400;
+    margin-bottom: 2em;
+    line-height: 1.4;
+}
+
+.article-intro {
+    max-width: 38em;
+    margin: 0 auto;
+}
+
+.lead {
+    font-size: 14pt;
+    line-height: 1.6;
+    color: var(--heading-color);
+    font-family: var(--heading-font);
+    font-style: italic;
+}
+
+/* Imagens */
+.feature-image {
+    margin: 3em 0;
+}
+
+.image-placeholder {
+    background-color: var(--quote-bg);
+    padding: 2em;
+    margin: 2em 0;
+    border: 1px solid #E9ECEF;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.image-placeholder.editorial {
+    background: linear-gradient(45deg, #f6f6f6, #ffffff);
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Corpo do Artigo */
+.article-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2em;
+    font-size: 11pt;
+    line-height: 1.8;
+    text-align: justify;
+    hyphens: auto;
+}
+
+.opening-statement {
+    font-size: 13pt;
+    max-width: 38em;
+    margin: 0 auto 3em;
+    text-align: left;
+}
+
+.article-section {
+    margin: 3em 0;
+}
+
+.section-content {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2em;
+    align-items: start;
+}
+
+h3 {
+    font-family: var(--heading-font);
+    font-size: 24pt;
+    color: var(--heading-color);
+    margin: 1em 0;
+}
+
+/* Citações e Destaques */
+.sidebar-quote {
+    font-family: var(--heading-font);
+    font-style: italic;
+    font-size: 16pt;
+    line-height: 1.4;
+    color: var(--accent-color);
+    padding: 2em;
+    margin: 2em 0;
+    background-color: var(--quote-bg);
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Sumário */
+.table-of-contents {
+    margin: 4em 0;
+    padding: 2em;
+    background: var(--quote-bg);
+    border-radius: 4px;
+}
+
+.table-of-contents h2 {
+    margin-bottom: 1em;
+    font-size: 16pt;
+}
+
+.toc-list {
+    list-style: none;
+}
+
+.toc-list li {
+    margin-bottom: 0.5em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+}
+
+.toc-list a {
+    color: var(--text-color);
+    text-decoration: none;
+    flex: 1;
+}
+
+.toc-list .dots {
+    border-bottom: 1px dotted var(--text-color);
+    flex: 1;
+    margin: 0 0.5em;
+}
+
+.toc-list .page-num {
+    color: var(--heading-color);
+}
+
+/* Otimizações para Impressão */
+@media print {
+    @page {
+        margin: 20mm;
+        size: A4 portrait;
+        @bottom-center {
+            content: counter(page);
+            font-family: var(--body-font);
+            font-size: 10pt;
+        }
+    }
+
+    body {
+        background: none;
+        counter-reset: page 1;
+    }
+
+    .magazine-article {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .article-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    h1, h2, h3 {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .image-placeholder,
+    .sidebar-quote {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .table-of-contents {
+        page-break-after: always;
+        break-after: always;
+    }
+
+    .opening-statement {
+        page-break-before: always;
+        break-before: always;
+    }
+
+    /* Hide links in print */
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* Ensure proper page breaks between major sections */
+    .article-section + .article-section {
+        page-break-before: always;
+        break-before: always;
+    }
+}
