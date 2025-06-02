@@ -67,6 +67,7 @@
             background: var(--folder-bg);
             border-radius: 4px;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         .folder:hover {
@@ -78,10 +79,8 @@
             font-size: 1.2rem;
             color: var(--primary-color);
             font-weight: 600;
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            cursor: pointer;
         }
 
         .folder-name::before {
@@ -91,6 +90,7 @@
 
         .file-list {
             list-style: none;
+            margin: 1rem 0;
             margin-left: 2rem;
         }
 
@@ -130,18 +130,6 @@
             margin-left: 1rem;
         }
 
-        .empty-folder {
-            color: #6C757D;
-            font-style: italic;
-            margin-left: 2rem;
-        }
-
-        #loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--accent-color);
-        }
-
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
@@ -163,129 +151,109 @@
         <div id="breadcrumb" class="breadcrumb">
             <a href="#" onclick="navigateToRoot()">Home</a>
         </div>
-        <div id="content">
-            <div id="loading">Loading files...</div>
-        </div>
+        <div id="content"></div>
     </div>
 
     <script>
+        // Define the structure of your documentos folder
+        const fileSystem = {
+            cook: {
+                files: [
+                    'Como fazer chocolate quente elegante.pdf'
+                ]
+            },
+            financial: {
+                files: [
+                    'Como sair das dívidas em 2025_curto.pdf'
+                ]
+            }
+        };
+
         let currentPath = [];
 
-        async function loadDirectory(path = []) {
-            try {
-                currentPath = path;
-                updateBreadcrumb();
-                
-                const dirPath = path.join('/');
-                const response = await fetch(`/api/files?path=${encodeURIComponent(dirPath)}`);
-                if (!response.ok) throw new Error('Failed to load directory');
-                
-                const data = await response.json();
-                const content = document.getElementById('content');
-                content.innerHTML = '';
+        function showFolder(folderContent, parentPath = []) {
+            const content = document.getElementById('content');
+            content.innerHTML = '';
 
-                // Sort folders and files
-                const folders = data.filter(item => item.type === 'directory').sort((a, b) => a.name.localeCompare(b.name));
-                const files = data.filter(item => item.type === 'file').sort((a, b) => a.name.localeCompare(b.name));
+            // Get folders and sort them
+            const folders = Object.keys(folderContent)
+                .filter(key => key !== 'files')
+                .sort();
 
-                // Create folder elements
-                folders.forEach(folder => {
-                    const folderDiv = createFolderElement(folder.name);
-                    content.appendChild(folderDiv);
+            // Get files and sort them
+            const files = (folderContent.files || []).sort();
+
+            // Display folders
+            folders.forEach(folder => {
+                const folderDiv = document.createElement('div');
+                folderDiv.className = 'folder';
+                folderDiv.innerHTML = `<div class="folder-name">${folder}</div>`;
+                folderDiv.onclick = () => {
+                    currentPath = [...parentPath, folder];
+                    showFolder(folderContent[folder], currentPath);
+                    updateBreadcrumb();
+                };
+                content.appendChild(folderDiv);
+            });
+
+            // Display files
+            if (files.length > 0) {
+                const fileList = document.createElement('ul');
+                fileList.className = 'file-list';
+
+                files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.className = 'file-item';
+                    const filePath = [...parentPath, file].join('/');
+                    li.innerHTML = `
+                        <a href="documentos/${filePath}" class="file-link" download>
+                            <span>${file}</span>
+                            <span class="file-info">${getFileExtension(file)}</span>
+                        </a>
+                    `;
+                    fileList.appendChild(li);
                 });
 
-                // Create file elements
-                if (files.length > 0) {
-                    const fileList = document.createElement('ul');
-                    fileList.className = 'file-list';
-                    
-                    files.forEach(file => {
-                        const fileItem = createFileElement(file.name);
-                        fileList.appendChild(fileItem);
-                    });
-                    
-                    content.appendChild(fileList);
-                }
-
-            } catch (error) {
-                console.error('Error loading directory:', error);
-                document.getElementById('content').innerHTML = 
-                    '<div class="error">Error loading directory. Please try again later.</div>';
+                content.appendChild(fileList);
             }
         }
 
-        function createFolderElement(name) {
-            const folderDiv = document.createElement('div');
-            folderDiv.className = 'folder';
-            
-            const folderName = document.createElement('div');
-            folderName.className = 'folder-name';
-            folderName.textContent = name;
-            folderName.onclick = () => navigateToFolder(name);
-            
-            folderDiv.appendChild(folderName);
-            return folderDiv;
-        }
-
-        function createFileElement(name) {
-            const li = document.createElement('li');
-            li.className = 'file-item';
-            
-            const link = document.createElement('a');
-            link.className = 'file-link';
-            
-            // Construct the file path relative to the current directory
-            const filePath = [...currentPath, name].join('/');
-            link.href = filePath;
-            link.download = name;
-            
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = name;
-            
-            const infoSpan = document.createElement('span');
-            infoSpan.className = 'file-info';
-            infoSpan.textContent = getFileExtension(name).toUpperCase();
-            
-            link.appendChild(nameSpan);
-            link.appendChild(infoSpan);
-            li.appendChild(link);
-            
-            return li;
-        }
-
         function getFileExtension(filename) {
-            return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+            return filename.split('.').pop().toUpperCase();
         }
 
         function updateBreadcrumb() {
             const breadcrumb = document.getElementById('breadcrumb');
             let html = '<a href="#" onclick="navigateToRoot()">Home</a>';
             
-            let path = '';
-            currentPath.forEach((segment, index) => {
-                path += '/' + segment;
-                html += ` / <a href="#" onclick="navigateToPath('${path}')">${segment}</a>`;
+            let path = [];
+            currentPath.forEach(segment => {
+                path.push(segment);
+                html += ` / <a href="#" onclick="navigateToPath('${path.join('/')}')">${segment}</a>`;
             });
             
             breadcrumb.innerHTML = html;
         }
 
-        function navigateToFolder(folderName) {
-            const newPath = [...currentPath, folderName];
-            loadDirectory(newPath);
-        }
-
         function navigateToPath(path) {
-            const segments = path.split('/').filter(Boolean);
-            loadDirectory(segments);
+            const segments = path.split('/');
+            let current = fileSystem;
+            segments.forEach(segment => {
+                current = current[segment];
+            });
+            currentPath = segments;
+            showFolder(current, segments);
+            updateBreadcrumb();
         }
 
         function navigateToRoot() {
-            loadDirectory([]);
+            currentPath = [];
+            showFolder(fileSystem);
+            updateBreadcrumb();
         }
 
-        // Initial load starting from 'documentos' directory
-        loadDirectory(['documentos']);
+        // Initial load
+        navigateToRoot();
     </script>
 </body>
 </html>
