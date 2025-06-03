@@ -1,0 +1,101 @@
+Create a high-quality, print-ready landing page styled like a magazine or newspaper article. The content should be structured in HTML for A4 portrait print layout, with a clean and elegant editorial tone. Layout and formatting should mimic a feature article from a high-end publication, not a sales page.
+Use the following variables:
+
+{{theme}}: {Culinária}
+{{title}}: {Como fazer fondue}
+{{additional details or focus}} (optional): {Dicas e receitas com toques disruptivos, ingredientes pouco convencionais para melhor apresentação e degustação}
+{{min_word_count}}: {20000}
+{{language}} : {pt-BR}
+{{author_reference}} (style inspiration): {Camila Cardoso, Julia Child, David Nussbaum, Gabriela Erbetta}
+{{related_books}} (to use as stylistic and structural context): {"Finanças para garotas; Constituição, constitucionalismo e direitos fundamentais", "A arte culinária de Julia Child..."}
+
+Requirements:
+
+Language and Volume
+
+Write all content in {{language}}
+Ensure a minimum of {{min_word_count}} words
+
+
+Stylistic Reference
+
+Emulate the tone and narrative rhythm of {{author_reference}}, using {{related_books}} as structural and emotional references.
+Maintain a voice appropriate to editorial journalism or premium print magazines.
+
+
+Design and Layout
+
+Structure the content as a clean, semantically correct HTML page suitable for A4 printing
+Use tags like <section>, <h1>, <p>, <blockquote>, <ul>, etc., with sophisticated inline styles for elegant presentation
+Visual Design Focus: Apply attractive color schemes with harmonious and soft tones that complement the theme
+Use gradient backgrounds, subtle shadows, and elegant typography styling
+Implement sophisticated color palettes that enhance readability and visual appeal
+Do not include external CSS files or JavaScript—keep styling inline but visually rich
+
+
+Color Scheme and Styling Guidelines
+
+Primary Focus: Create visually stunning pages using attractive color combinations
+Use soft, complementary colors that relate to the {{theme}}
+Apply gradient backgrounds and subtle color transitions
+Implement elegant typography with varied font weights and sizes
+Add visual elements like borders, shadows, and background patterns using CSS
+Ensure color harmony throughout the document with a cohesive palette
+No images required - focus entirely on sophisticated color styling and typography
+
+
+Content Blocks
+a. Title & Subtitle
+
+Use <h1> for the title: {{title}} with elegant styling and color scheme
+Add a short emotional or thematic subtitle in a styled <p> or <h2> tag
+
+b. Intro Section
+
+One or two paragraphs introducing {{theme}} and linking it emotionally or intellectually to the reader
+Style with attractive background colors and typography
+
+c. Main Article Body (3–4 sections)
+
+Use styled <h2> for subheadings with complementary colors, followed by 1–3 paragraphs per section
+Apply varied styling approaches:
+
+Alternating background colors for sections
+Different text styling and spacing
+Elegant borders and visual separators
+
+
+
+d. Insights List
+
+Add a beautifully styled <ul> list with 4–6 key takeaways or benefits
+Use attractive bullet points and color-coded styling
+
+e. Pull-Quote / Highlight
+
+Include a reflective or motivational quote in an elegantly styled <blockquote>
+Apply sophisticated color schemes and typography for emphasis
+
+f. Conclusion
+
+A short final section (1–2 paragraphs) with distinctive styling that reflects on the topic and inspires the reader
+
+
+Styling Requirements
+
+Color Harmony: Ensure all colors work together harmoniously
+Soft Transitions: Use gentle gradients and subtle color changes
+Typography Excellence: Vary font sizes, weights, and spacing for visual hierarchy
+Background Elements: Apply tasteful background colors, patterns, or gradients
+Visual Balance: Maintain elegant proportions and white space
+
+
+Restrictions
+
+Do NOT include: author names, purchase links, buttons, forms, calls to action, marketing phrases
+Do NOT include images or image references
+Focus entirely on sophisticated color styling and typography for visual impact
+
+
+
+The final result should feel like a beautifully crafted feature article in a premium print magazine, rich in insights and visually stunning through sophisticated color design and typography alone. The page should be print-ready with an elegant, harmonious color scheme that enhances the reading experience.

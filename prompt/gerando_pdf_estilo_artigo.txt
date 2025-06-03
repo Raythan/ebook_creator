@@ -3,12 +3,12 @@ Create a high-quality, print-ready landing page styled like a magazine or newspa
 Use the following variables:
 
 - {{theme}}: {Culinária}  
-- {{title}}: {Como fazer chocolate quente elegante}
+- {{title}}: {Como fazer fondue}
 - {{additional details or focus}} (optional): {Dicas e receitas com toques disruptivos, ingredientes pouco convencionais para melhor apresentação e degustação}
 - {{min_word_count}}: {20000}
 - {{language}} : {pt-BR}
-- {{author_reference}} (style inspiration): {Camila Cardoso}
-- {{related_books}} (to use as stylistic and structural context): {Finanças para garotas; Constituição, constitucionalismo e direitos undamentais}
+- {{author_reference}} (style inspiration): {Camila Cardoso, Julia Child, David Nussbaum, Gabriela Erbetta}
+- {{related_books}} (to use as stylistic and structural context): {"Finanças para garotas; Constituição, constitucionalismo e direitos fundamentais", "A arte culinária de Julia Child..."}
 
 ### Requirements:
 
@@ -64,10 +64,8 @@ Use the following variables:
    - Do NOT mention the image prompt text directly in the article—only as HTML comments for internal generation
 
 7. **File Structure Expected**  
-   - For each image inserted, generate the image prompt as a comment like:  
-     `<!-- img3.txt: A metaphorical illustration of focus and chaos in a modern office setting, minimalist style -->`  
    - The image itself should be referenced with:  
      `<img src="images/img3.jpg" alt="..." />`  
    - This allows external tools to extract and generate images from the `imgN.txt` files and place them in `images/imgN.jpg`
 
-The final result should feel like a beautifully crafted feature article in a thematic print magazine, rich in insights and visually balanced. Refresh the prompts to generate images, relate then with the context.
+The final result should feel like a beautifully crafted feature article in a thematic print magazine, rich in insights and visually balanced. Always refresh the prompts to generate images, relate then with the context. Alter landing_pages_sample.html
