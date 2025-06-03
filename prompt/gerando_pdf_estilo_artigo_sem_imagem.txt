@@ -1,9 +1,41 @@
 Create a high-quality, print-ready landing page styled like a magazine or newspaper article. The content should be structured in HTML for A4 portrait print layout, with a clean and elegant editorial tone. Layout and formatting should mimic a feature article from a high-end publication, not a sales page.
 Use the following variables:
 
-{{theme}}: {Culinária}
-{{title}}: {Como fazer fondue}
-{{additional details or focus}} (optional): {Dicas e receitas com toques disruptivos, ingredientes pouco convencionais para melhor apresentação e degustação}
+{{theme}}: {Clima}
+{{title}}: {O Fascínio do Frio: Como o Clima Gélido Molda Nossa Vida, Cultura e Corpo}
+{{additional details or focus}} (optional): {1. O Que é o Frio?
+Conceito físico: temperatura, sensação térmica e vento.
+Diferença entre frio seco e frio úmido.
+Curiosidades sobre os lugares mais frios do planeta.
+2. Como o Corpo Humano Reage ao Frio
+Termorregulação e calafrios.
+Efeitos positivos e negativos (queima calórica, hipotermia, imunidade).
+Adaptações históricas de populações em regiões frias.
+3. Comida de Inverno: Por que Comemos Diferente no Frio
+Necessidade de mais calorias.
+Alimentos típicos: fondues, sopas, assados, bebidas quentes.
+Ritual social da comida no frio.
+4.️ O Comportamento Humano nas Estações Frias
+Mudanças de humor e energia (ex: depressão sazonal).
+A busca por aconchego (hygge, o conceito dinamarquês).
+Tendência à introspecção e atividades caseiras.
+5. Frio na Arte, na Literatura e no Cinema
+Como o frio simboliza solidão, pureza, silêncio ou morte.
+Obras clássicas passadas no inverno: de “Anna Karenina” a “O Regresso”.
+Estética visual do gelo e da neve.
+6.️ Cultura e Tradições do Frio
+Festivais de inverno pelo mundo (como o Festival de Gelo de Harbin).
+Tradições em torno do aquecimento (lareira, fogueira, sauna, banho quente).
+Moda de inverno como expressão cultural.
+7. O Inverno como Ciclo Natural e Espiritual
+Estações como metáfora de fases da vida.
+A pausa do inverno como tempo de recolhimento e preparo.
+Práticas espirituais que valorizam o recolhimento (ex: meditação no frio).
+Variações de abordagem
+Educacional: ciência + história + cultura.
+Reflexiva: frio como metáfora de transformação interior.
+Gastronômica: guia de comidas e rituais de inverno.
+Estética: livro visual ou blog com imagens e design inspirados no inverno.}
 {{min_word_count}}: {20000}
 {{language}} : {pt-BR}
 {{author_reference}} (style inspiration): {Camila Cardoso, Julia Child, David Nussbaum, Gabriela Erbetta}
@@ -16,12 +48,10 @@ Language and Volume
 Write all content in {{language}}
 Ensure a minimum of {{min_word_count}} words
 
-
 Stylistic Reference
 
 Emulate the tone and narrative rhythm of {{author_reference}}, using {{related_books}} as structural and emotional references.
 Maintain a voice appropriate to editorial journalism or premium print magazines.
-
 
 Design and Layout
 
@@ -32,7 +62,6 @@ Use gradient backgrounds, subtle shadows, and elegant typography styling
 Implement sophisticated color palettes that enhance readability and visual appeal
 Do not include external CSS files or JavaScript—keep styling inline but visually rich
 
-
 Color Scheme and Styling Guidelines
 
 Primary Focus: Create visually stunning pages using attractive color combinations
@@ -42,7 +71,6 @@ Implement elegant typography with varied font weights and sizes
 Add visual elements like borders, shadows, and background patterns using CSS
 Ensure color harmony throughout the document with a cohesive palette
 No images required - focus entirely on sophisticated color styling and typography
-
 
 Content Blocks
 a. Title & Subtitle
@@ -64,8 +92,6 @@ Alternating background colors for sections
 Different text styling and spacing
 Elegant borders and visual separators
 
-
-
 d. Insights List
 
 Add a beautifully styled <ul> list with 4–6 key takeaways or benefits
@@ -80,7 +106,6 @@ f. Conclusion
 
 A short final section (1–2 paragraphs) with distinctive styling that reflects on the topic and inspires the reader
 
-
 Styling Requirements
 
 Color Harmony: Ensure all colors work together harmoniously
@@ -89,13 +114,10 @@ Typography Excellence: Vary font sizes, weights, and spacing for visual hierarch
 Background Elements: Apply tasteful background colors, patterns, or gradients
 Visual Balance: Maintain elegant proportions and white space
 
-
 Restrictions
 
 Do NOT include: author names, purchase links, buttons, forms, calls to action, marketing phrases
 Do NOT include images or image references
 Focus entirely on sophisticated color styling and typography for visual impact
-
-
 
 The final result should feel like a beautifully crafted feature article in a premium print magazine, rich in insights and visually stunning through sophisticated color design and typography alone. The page should be print-ready with an elegant, harmonious color scheme that enhances the reading experience.
