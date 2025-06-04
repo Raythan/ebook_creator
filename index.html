@@ -5,256 +5,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Repository</title>
     <style>
-        :root {
-            --primary-color: #2C3E50;
-            --accent-color: #3498DB;
-            --bg-color: #F8F9FA;
-            --text-color: #2C3E50;
-            --border-color: #E9ECEF;
-            --folder-bg: #EBF5FB;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background: var(--bg-color);
+            max-width: 800px;
+            margin: 0 auto;
             padding: 2rem;
+            background: #f8f9fa;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
             background: white;
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        h1, h2 {
+            color: #2C3E50;
+            margin-bottom: 1rem;
+        }
+
         h1 {
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
             text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #E9ECEF;
         }
 
-        .breadcrumb {
-            margin-bottom: 2rem;
-            padding: 0.5rem 1rem;
-            background: var(--folder-bg);
-            border-radius: 4px;
-        }
-
-        .breadcrumb a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .folder {
-            margin: 1rem 0;
+        .category {
+            margin: 2rem 0;
             padding: 1rem;
-            background: var(--folder-bg);
+            background: #EBF5FB;
             border-radius: 4px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .folder:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .folder-name {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-
-        .folder-name::before {
-            content: "📁";
-            margin-right: 0.5rem;
         }
 
         .file-list {
             list-style: none;
-            margin: 1rem 0;
-            margin-left: 2rem;
+            padding: 0;
         }
 
         .file-item {
-            padding: 0.75rem;
+            padding: 0.5rem;
             margin: 0.5rem 0;
             background: white;
             border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .file-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
         }
 
         .file-link {
-            color: var(--accent-color);
+            color: #2980B9;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .file-link::before {
-            content: "📄";
-            margin-right: 0.5rem;
+            display: block;
+            padding: 0.5rem;
         }
 
         .file-link:hover {
-            color: #2980b9;
-        }
-
-        .file-info {
-            font-size: 0.9rem;
-            color: #6C757D;
-            margin-left: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .file-list {
-                margin-left: 1rem;
-            }
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Document Repository</h1>
-        <div id="breadcrumb" class="breadcrumb">
-            <a href="#" onclick="navigateToRoot()">Home</a>
-        </div>
         <div id="content"></div>
-    </div>
-
-    <script>
-        // Define the structure of your documentos folder
-        const fileSystem = {
-            cook: {
-                files: [
-                    'Como fazer chocolate quente elegante.pdf',
-                    'Como fazer fondue.pdf'
-                ]
-            },
-            financial: {
-                files: [
-                    'Como sair das dívidas em 2025_curto.pdf'
-                ]
-            }
+    </div>    <script>
+        // Config data embedded directly in the page for local development
+        const localConfig = {
+            "cook": [
+                "Como fazer chocolate quente elegante.pdf",
+                "Como fazer fondue.pdf"
+            ],
+            "financial": [
+                "Como sair das dívidas em 2025_curto.pdf"
+            ],
+            "health": [
+                "Como fazer um smoothie saudável.pdf",
+                "Como manter uma dieta equilibrada.pdf"
+            ],
         };
 
-        let currentPath = [];
+        async function loadConfig() {
+            // Check if we're running locally
+            const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+                || window.location.protocol === 'file:';
 
-        function showFolder(folderContent, parentPath = []) {
-            const content = document.getElementById('content');
-            content.innerHTML = '';
-
-            // Get folders and sort them
-            const folders = Object.keys(folderContent)
-                .filter(key => key !== 'files')
-                .sort();
-
-            // Get files and sort them
-            const files = (folderContent.files || []).sort();
-
-            // Display folders
-            folders.forEach(folder => {
-                const folderDiv = document.createElement('div');
-                folderDiv.className = 'folder';
-                folderDiv.innerHTML = `<div class="folder-name">${folder}</div>`;
-                folderDiv.onclick = () => {
-                    currentPath = [...parentPath, folder];
-                    showFolder(folderContent[folder], currentPath);
-                    updateBreadcrumb();
-                };
-                content.appendChild(folderDiv);
-            });
-
-            // Display files
-            if (files.length > 0) {
-                const fileList = document.createElement('ul');
-                fileList.className = 'file-list';
-
-                files.forEach(file => {
-                    const li = document.createElement('li');
-                    li.className = 'file-item';
-                    const filePath = [...parentPath, file].join('/');
-                    li.innerHTML = `
-                        <a href="documentos/${filePath}" class="file-link" download>
-                            <span>${file}</span>
-                            <span class="file-info">${getFileExtension(file)}</span>
-                        </a>
-                    `;
-                    fileList.appendChild(li);
-                });
-
-                content.appendChild(fileList);
+            if (isLocalhost) {
+                console.log('Running in local environment, using embedded config');
+                return localConfig;
+            } else {
+                console.log('Running in production environment, fetching config.json');
+                try {
+                    const response = await fetch('config.json');
+                    if (!response.ok) throw new Error('Failed to fetch config');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error loading config:', error);
+                    // Fallback to local config if fetch fails
+                    return localConfig;
+                }
             }
         }
 
-        function getFileExtension(filename) {
-            return filename.split('.').pop().toUpperCase();
-        }
-
-        function updateBreadcrumb() {
-            const breadcrumb = document.getElementById('breadcrumb');
-            let html = '<a href="#" onclick="navigateToRoot()">Home</a>';
+        function displayDocuments(config) {
+            const content = document.getElementById('content');
             
-            let path = [];
-            currentPath.forEach(segment => {
-                path.push(segment);
-                html += ` / <a href="#" onclick="navigateToPath('${path.join('/')}')">${segment}</a>`;
-            });
-            
-            breadcrumb.innerHTML = html;
-        }
-
-        function navigateToPath(path) {
-            const segments = path.split('/');
-            let current = fileSystem;
-            segments.forEach(segment => {
-                current = current[segment];
-            });
-            currentPath = segments;
-            showFolder(current, segments);
-            updateBreadcrumb();
-        }
-
-        function navigateToRoot() {
-            currentPath = [];
-            showFolder(fileSystem);
-            updateBreadcrumb();
-        }
-
-        // Initial load
-        navigateToRoot();
+            for (const [category, files] of Object.entries(config)) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                const categoryTitle = document.createElement('h2');
+                categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                categoryDiv.appendChild(categoryTitle);
+                
+                const fileList = document.createElement('ul');
+                fileList.className = 'file-list';
+                
+                files.forEach(file => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'file-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = `documentos/${category}/${file}`;
+                    link.className = 'file-link';
+                    link.textContent = file;
+                    
+                    listItem.appendChild(link);
+                    fileList.appendChild(listItem);
+                });
+                
+                categoryDiv.appendChild(fileList);
+                content.appendChild(categoryDiv);
+            }
+        }        // Load and display documents
+        loadConfig().then(config => {
+            displayDocuments(config);
+        }).catch(error => {
+            console.error('Failed to initialize:', error);
+        });
     </script>
 </body>
 </html>
